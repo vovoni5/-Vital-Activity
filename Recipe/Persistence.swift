@@ -14,10 +14,22 @@ struct PersistenceController {
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-        }
+        // Примеры рецептов для превью
+        let sampleRecipe = RecipeEntity(context: viewContext)
+        sampleRecipe.id = UUID()
+        sampleRecipe.title = "Овсяная каша с ягодами"
+        sampleRecipe.category = "Завтраки"
+        sampleRecipe.detailsText = "Нежная овсяная каша на молоке с сезонными ягодами."
+
+        let sampleRecipe2 = RecipeEntity(context: viewContext)
+        sampleRecipe2.id = UUID()
+        sampleRecipe2.title = "Овощной крем‑суп"
+        sampleRecipe2.category = "Супы"
+        sampleRecipe2.detailsText = "Лёгкий и ароматный суп‑пюре для всей семьи."
+
+        let mealPlan = MealPlanEntity(context: viewContext)
+        mealPlan.id = UUID()
+        mealPlan.name = "Семейный день"
         do {
             try viewContext.save()
         } catch {

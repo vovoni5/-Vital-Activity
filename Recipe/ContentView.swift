@@ -11,75 +11,69 @@ import CoreData
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
+    @State private var showSplash: Bool = true
+    @State private var showMain: Bool = false
+    @State private var pendingRecipeObjectID: NSManagedObjectID?
 
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
-                }
-                .onDelete(perform: deleteItems)
+        ZStack {
+            AppGradientBackground()
+
+            if showSplash {
+                SplashView()
+                    .transition(.opacity.combined(with: .scale))
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+
+            if showMain {
+                NavigationStack {
+                    MainMenuView()
+                        .navigationDestination(
+                            isPresented: Binding(
+                                get: { pendingRecipeObjectID != nil },
+                                set: { isActive in
+                                    if !isActive { pendingRecipeObjectID = nil }
+                                }
+                            )
+                        ) {
+                            destinationTimerView()
+                        }
                 }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .environment(\.managedObjectContext, viewContext)
+        .ignoresSafeArea()
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.5)) {
+                showSplash = true
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                withAnimation(.easeInOut(duration: 0.4)) {
+                    showSplash = false
+                }
+                withAnimation(.easeInOut(duration: 0.5).delay(0.1)) {
+                    showMain = true
                 }
             }
-            Text("Select an item")
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openRecipeTimer)) { notif in
+            if let id = notif.userInfo?["recipeObjectID"] as? NSManagedObjectID {
+                pendingRecipeObjectID = id
+            }
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+    @ViewBuilder
+    private func destinationTimerView() -> some View {
+        if let objectID = pendingRecipeObjectID,
+           let recipe = try? viewContext.existingObject(with: objectID) as? RecipeEntity {
+            CookingTimerRecipeView(recipe: recipe)
+        } else {
+            EmptyView()
         }
     }
 }
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
 
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)

@@ -6,6 +6,23 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A1B2C3D4E5F60123456789A0 /* Recipe/RecipeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789A1 /* Recipe/RecipeApp.swift */; };
+		A1B2C3D4E5F60123456789A2 /* Recipe/ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789A3 /* Recipe/ContentView.swift */; };
+		A1B2C3D4E5F60123456789A4 /* Recipe/Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789A5 /* Recipe/Persistence.swift */; };
+		A1B2C3D4E5F60123456789A6 /* Recipe/StyleSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789A7 /* Recipe/StyleSystem.swift */; };
+		A1B2C3D4E5F60123456789A8 /* Recipe/SplashAndMainViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789A9 /* Recipe/SplashAndMainViews.swift */; };
+		A1B2C3D4E5F60123456789AA /* Recipe/DomainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789AB /* Recipe/DomainModels.swift */; };
+		A1B2C3D4E5F60123456789AC /* Recipe/CoreDataSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789AD /* Recipe/CoreDataSupport.swift */; };
+		A1B2C3D4E5F60123456789AE /* Recipe/RecipesBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789AF /* Recipe/RecipesBaseView.swift */; };
+		A1B2C3D4E5F60123456789B0 /* Recipe/AddOrEditRecipeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789B1 /* Recipe/AddOrEditRecipeSheet.swift */; };
+		A1B2C3D4E5F60123456789B2 /* Recipe/RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789B3 /* Recipe/RecipeDetailView.swift */; };
+		A1B2C3D4E5F60123456789B4 /* Recipe/MealPlanPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789B5 /* Recipe/MealPlanPickerSheet.swift */; };
+		A1B2C3D4E5F60123456789B6 /* Recipe/MenuPlannerViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789B7 /* Recipe/MenuPlannerViews.swift */; };
+		A1B2C3D4E5F60123456789B8 /* Recipe/CookingTimerViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789B9 /* Recipe/CookingTimerViews.swift */; };
+		A1B2C3D4E5F60123456789BA /* Recipe/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789BB /* Recipe/Assets.xcassets */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		D5457FC72F618D720040DFAF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,14 +41,41 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1B2C3D4E5F60123456789A1 /* Recipe/RecipeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/RecipeApp.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789A3 /* Recipe/ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/ContentView.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789A5 /* Recipe/Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/Persistence.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789A7 /* Recipe/StyleSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/StyleSystem.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789A9 /* Recipe/SplashAndMainViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/SplashAndMainViews.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789AB /* Recipe/DomainModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/DomainModels.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789AD /* Recipe/CoreDataSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/CoreDataSupport.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789AF /* Recipe/RecipesBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/RecipesBaseView.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789B1 /* Recipe/AddOrEditRecipeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/AddOrEditRecipeSheet.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789B3 /* Recipe/RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/RecipeDetailView.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789B5 /* Recipe/MealPlanPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/MealPlanPickerSheet.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789B7 /* Recipe/MenuPlannerViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/MenuPlannerViews.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789B9 /* Recipe/CookingTimerViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe/CookingTimerViews.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F60123456789BB /* Recipe/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Recipe/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		D5457FB42F618D700040DFAF /* Recipe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recipe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5457FC62F618D720040DFAF /* RecipeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5457FD02F618D720040DFAF /* RecipeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D5EFF52D2F63167200687CC4 /* Exceptions for "Recipe" folder in "Recipe" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D5457FB32F618D700040DFAF /* Recipe */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D5457FB62F618D700040DFAF /* Recipe */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D5EFF52D2F63167200687CC4 /* Exceptions for "Recipe" folder in "Recipe" target */,
+			);
 			path = Recipe;
 			sourceTree = "<group>";
 		};
@@ -79,6 +123,7 @@
 				D5457FC92F618D720040DFAF /* RecipeTests */,
 				D5457FD32F618D720040DFAF /* RecipeUITests */,
 				D5457FB52F618D700040DFAF /* Products */,
+				D5EFF48D2F62C7C700687CC4 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -90,6 +135,27 @@
 				D5457FD02F618D720040DFAF /* RecipeUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D5EFF48D2F62C7C700687CC4 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F60123456789A1 /* Recipe/RecipeApp.swift */,
+				A1B2C3D4E5F60123456789A3 /* Recipe/ContentView.swift */,
+				A1B2C3D4E5F60123456789A5 /* Recipe/Persistence.swift */,
+				A1B2C3D4E5F60123456789A7 /* Recipe/StyleSystem.swift */,
+				A1B2C3D4E5F60123456789A9 /* Recipe/SplashAndMainViews.swift */,
+				A1B2C3D4E5F60123456789AB /* Recipe/DomainModels.swift */,
+				A1B2C3D4E5F60123456789AD /* Recipe/CoreDataSupport.swift */,
+				A1B2C3D4E5F60123456789AF /* Recipe/RecipesBaseView.swift */,
+				A1B2C3D4E5F60123456789B1 /* Recipe/AddOrEditRecipeSheet.swift */,
+				A1B2C3D4E5F60123456789B3 /* Recipe/RecipeDetailView.swift */,
+				A1B2C3D4E5F60123456789B5 /* Recipe/MealPlanPickerSheet.swift */,
+				A1B2C3D4E5F60123456789B7 /* Recipe/MenuPlannerViews.swift */,
+				A1B2C3D4E5F60123456789B9 /* Recipe/CookingTimerViews.swift */,
+				A1B2C3D4E5F60123456789BB /* Recipe/Assets.xcassets */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,6 +278,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1B2C3D4E5F60123456789BA /* Recipe/Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +303,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1B2C3D4E5F60123456789A0 /* Recipe/RecipeApp.swift in Sources */,
+				A1B2C3D4E5F60123456789A2 /* Recipe/ContentView.swift in Sources */,
+				A1B2C3D4E5F60123456789A4 /* Recipe/Persistence.swift in Sources */,
+				A1B2C3D4E5F60123456789A6 /* Recipe/StyleSystem.swift in Sources */,
+				A1B2C3D4E5F60123456789A8 /* Recipe/SplashAndMainViews.swift in Sources */,
+				A1B2C3D4E5F60123456789AA /* Recipe/DomainModels.swift in Sources */,
+				A1B2C3D4E5F60123456789AC /* Recipe/CoreDataSupport.swift in Sources */,
+				A1B2C3D4E5F60123456789AE /* Recipe/RecipesBaseView.swift in Sources */,
+				A1B2C3D4E5F60123456789B0 /* Recipe/AddOrEditRecipeSheet.swift in Sources */,
+				A1B2C3D4E5F60123456789B2 /* Recipe/RecipeDetailView.swift in Sources */,
+				A1B2C3D4E5F60123456789B4 /* Recipe/MealPlanPickerSheet.swift in Sources */,
+				A1B2C3D4E5F60123456789B6 /* Recipe/MenuPlannerViews.swift in Sources */,
+				A1B2C3D4E5F60123456789B8 /* Recipe/CookingTimerViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +480,8 @@
 				DEVELOPMENT_TEAM = 4499H7YNDL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Recipe/Info.plist;
+				INFOPLIST_KEY_UIAppFonts = "Fonts/ofont.ru_Geoform.ttf Fonts/ofont.ru_Hero.ttf Fonts/ofont.ru_Kreadon.ttf Fonts/ofont.ru_Montserrat Alternates.ttf Fonts/ofont.ru_Optima.ttf";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,6 +514,8 @@
 				DEVELOPMENT_TEAM = 4499H7YNDL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Recipe/Info.plist;
+				INFOPLIST_KEY_UIAppFonts = "Fonts/ofont.ru_Geoform.ttf Fonts/ofont.ru_Hero.ttf Fonts/ofont.ru_Kreadon.ttf Fonts/ofont.ru_Montserrat Alternates.ttf Fonts/ofont.ru_Optima.ttf";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

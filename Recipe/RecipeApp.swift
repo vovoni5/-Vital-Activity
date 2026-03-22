@@ -12,6 +12,12 @@ import CoreData
 struct RecipeApp: App {
     let persistenceController = PersistenceController.shared
 
+    init() {
+        let accent = UIColor(red: 0.47, green: 0.20, blue: 0.95, alpha: 1.0)
+        UINavigationBar.appearance().tintColor = accent
+        UIBarButtonItem.appearance().tintColor = accent
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

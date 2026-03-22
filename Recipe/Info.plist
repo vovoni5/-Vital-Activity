@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>ofont.ru_DelphianC.ttf</string>
+		<string>ofont.ru_Geoform.ttf</string>
+		<string>ofont.ru_Hero.ttf</string>
+		<string>ofont.ru_Kreadon.ttf</string>
+		<string>ofont.ru_Montserrat Alternates.ttf</string>
+		<string>ofont.ru_Optima.ttf</string>
+	</array>
+</dict>
+</plist>
