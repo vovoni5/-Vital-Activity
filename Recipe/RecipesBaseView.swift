@@ -4,12 +4,6 @@ import CoreData
 struct RecipesBaseView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \RecipeEntity.title, ascending: true)],
-        animation: .default
-    )
-    private var recipes: FetchedResults<RecipeEntity>
-
     @State private var selectedCategory: RecipeCategory = .all
     @State private var showAddRecipeSheet = false
 
@@ -19,6 +13,13 @@ struct RecipesBaseView: View {
     @State private var pendingAddToPlan: RecipeEntity?
     @State private var showAddToPlanConfirm = false
     @State private var showPickMealPlan = false
+    @State private var showSaveConfirmation = false
+
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \RecipeEntity.title, ascending: true)],
+        animation: .default
+    )
+    private var recipes: FetchedResults<RecipeEntity>
 
     private var filtered: [RecipeEntity] {
         let allRecipes: [RecipeEntity] = recipes.map { $0 }
@@ -65,10 +66,13 @@ struct RecipesBaseView: View {
                     Image(systemName: "plus")
                         .font(.system(size: 18, weight: .semibold))
                 }
+                .accessibilityLabel("Добавить новый рецепт")
+                .accessibilityHint("Открывает форму для создания нового рецепта")
             }
         }
         .sheet(isPresented: $showAddRecipeSheet) {
             AddOrEditRecipeSheet(mode: .create) { draft in
+                print("Создание нового рецепта с заголовком: \(draft.title)")
                 let newRecipe = RecipeEntity(context: viewContext)
                 newRecipe.id = UUID()
                 newRecipe.title = draft.title.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -113,14 +117,44 @@ struct RecipesBaseView: View {
                 pendingAddToPlan = nil
             }
         }
+        .overlay(
+            Group {
+                if showSaveConfirmation {
+                    VStack {
+                        Spacer()
+                        Text("Изменения сохранены")
+                            .font(.system(size: 14, weight: .medium, design: .rounded))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 10)
+                            .background(Color.green.opacity(0.9))
+                            .cornerRadius(20)
+                            .shadow(radius: 4)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
+                    .padding(.bottom, 30)
+                }
+            }
+            .animation(.easeInOut(duration: 0.3), value: showSaveConfirmation)
+        )
     }
 
     private func save() {
         do {
             try viewContext.save()
+            print("Сохранение успешно, количество рецептов: \(recipes.count)")
+            withAnimation {
+                showSaveConfirmation = true
+            }
+            // Автоматически скрыть через 2 секунды
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation {
+                    showSaveConfirmation = false
+                }
+            }
         } catch {
-            // В продакшене показали бы аккуратный алерт.
-            assertionFailure("Core Data save error: \(error)")
+            print("Ошибка сохранения: \(error)")
+            ErrorHandler.handleCoreDataError(error, message: "Не удалось сохранить изменения в базе рецептов")
         }
     }
 }
@@ -173,23 +207,39 @@ private struct RecipeRow: View {
         }
         .buttonStyle(.plain)
         .contentShape(Rectangle())
+        .accessibilityLabel("Рецепт \(recipe.title ?? "")")
+        .accessibilityHint("Нажмите для просмотра деталей рецепта")
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
             Button {
                 onDeleteRequest()
             } label: {
-                Label("Удалить", systemImage: "trash")
+                HStack(spacing: 6) {
+                    Image(systemName: "trash")
+                        .font(.system(size: 14, weight: .bold))
+                    Text("Удалить")
+                        .font(.system(size: 14, weight: .bold))
+                }
+                .foregroundColor(.white)
+                .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: 1)
             }
-            .foregroundColor(AppColors.accentPink)
             .tint(AppColors.accentPink)
+            .accessibilityLabel("Удалить рецепт")
         }
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             Button {
                 onAddToPlanRequest()
             } label: {
-                Label("В рацион", systemImage: "text.badge.plus")
+                HStack(spacing: 6) {
+                    Image(systemName: "text.badge.plus")
+                        .font(.system(size: 14, weight: .bold))
+                    Text("В рацион")
+                        .font(.system(size: 14, weight: .bold))
+                }
+                .foregroundColor(.white)
+                .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: 1)
             }
-            .foregroundColor(AppColors.accentPurple)
             .tint(AppColors.accentPurple)
+            .accessibilityLabel("Добавить рецепт в рацион")
         }
     }
 }
@@ -203,12 +253,16 @@ private struct EmptyRecipesState: View {
                     .foregroundColor(AppColors.textPrimary)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .multilineTextAlignment(.center)
+                    .accessibilityLabel("Пока пусто")
                 Text("Нажмите +, чтобы добавить первый рецепт")
                     .secondaryText()
                     .animatedText()
+                    .accessibilityLabel("Нажмите плюс, чтобы добавить первый рецепт")
             }
             .frame(maxWidth: .infinity)
+            .accessibilityElement(children: .contain)
         }
+        .accessibilityLabel("Состояние пустого списка рецептов")
     }
 }
 
@@ -218,11 +272,15 @@ private struct RecipesHeader: View {
             Text("База рецептов")
                 .primaryTitle()
                 .animatedText()
+                .accessibilityLabel("База рецептов")
+                .accessibilityAddTraits(.isHeader)
             Text("Выбирайте, храните и готовьте с таймером")
                 .secondaryText()
                 .animatedText()
+                .accessibilityLabel("Выбирайте, храните и готовьте с таймером")
         }
         .padding(.top, 18)
+        .accessibilityElement(children: .contain)
     }
 }
 
@@ -265,10 +323,15 @@ private struct CategoryChips: View {
                             .multilineTextAlignment(.center)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("Категория \(cat.rawValue)")
+                    .accessibilityHint("Нажмите для фильтрации рецептов по этой категории")
+                    .accessibilityAddTraits(selected == cat ? [.isSelected] : [])
                 }
             }
             .padding(.vertical, 6)
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Фильтр категорий рецептов")
     }
 }
 

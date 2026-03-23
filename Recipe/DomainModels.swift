@@ -8,7 +8,7 @@ enum RecipeCategory: String, CaseIterable, Identifiable {
     case salads = "Салаты"
     case baking = "Выпечка"
     case desserts = "Десерты"
-    case snakes = "Закуски"
+    case snacks = "Закуски"
 
     var id: String { rawValue }
 
@@ -62,6 +62,17 @@ enum UnitConverter {
 
     static func piecesToGrams(_ pieces: Double) -> Double {
         pieces * gramsPerPiece
+    }
+
+    /// Форматирует количество для отображения, убирая лишние нули.
+    static func formatQuantity(_ value: Double, maxFractionDigits: Int = 2) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = maxFractionDigits
+        formatter.decimalSeparator = "."
+        formatter.groupingSeparator = ""
+        return formatter.string(from: NSNumber(value: value)) ?? "\(value)"
     }
 }
 

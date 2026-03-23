@@ -117,7 +117,9 @@ struct MenuPlannerListView: View {
     }
 
     private func save() {
-        do { try viewContext.save() } catch { assertionFailure("Core Data save error: \(error)") }
+        do { try viewContext.save() } catch {
+            ErrorHandler.handleCoreDataError(error, message: "Не удалось сохранить изменения в планировщике меню")
+        }
     }
 }
 
@@ -352,7 +354,9 @@ struct MealPlanDetailView: View {
     }
 
     private func save() {
-        do { try viewContext.save() } catch { assertionFailure("Core Data save error: \(error)") }
+        do { try viewContext.save() } catch {
+            ErrorHandler.handleCoreDataError(error, message: "Не удалось сохранить изменения в планировщике меню")
+        }
     }
 }
 

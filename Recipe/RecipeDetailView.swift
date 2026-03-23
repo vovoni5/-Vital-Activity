@@ -17,8 +17,10 @@ struct RecipeDetailView: View {
                 VStack(spacing: 14) {
                     VStack(spacing: 8) {
                         Text(recipe.title ?? "")
-                    .primaryTitle()
-                    .animatedText()
+                            .primaryTitle()
+                            .animatedText()
+                            .accessibilityLabel("Название рецепта: \(recipe.title ?? "")")
+                            .accessibilityAddTraits(.isHeader)
 
                         if let desc = recipe.detailsText, !desc.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                             TextWithLinks(
@@ -30,9 +32,11 @@ struct RecipeDetailView: View {
                             .frame(maxWidth: .infinity)
                             .multilineTextAlignment(.center)
                             .animatedText()
+                            .accessibilityLabel("Описание рецепта: \(desc)")
                         }
                     }
                     .padding(.top, 18)
+                    .accessibilityElement(children: .contain)
 
                     CardContainer {
                         VStack(spacing: 12) {
@@ -41,20 +45,25 @@ struct RecipeDetailView: View {
                                 .foregroundColor(AppColors.textPrimary)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .multilineTextAlignment(.center)
+                                .accessibilityLabel("Ингредиенты")
+                                .accessibilityAddTraits(.isHeader)
 
                             if recipe.ingredients.isEmpty {
                                 Text("Добавьте ингредиенты в режиме редактирования")
                                     .secondaryText()
                                     .animatedText()
+                                    .accessibilityLabel("Добавьте ингредиенты в режиме редактирования")
                             } else {
                                 VStack(spacing: 10) {
                                     ForEach(recipe.ingredients) { ing in
                                         IngredientReadOnlyRow(ingredient: ing)
                                     }
                                 }
+                                .accessibilityElement(children: .contain)
                             }
                         }
                     }
+                    .accessibilityElement(children: .contain)
 
                     CardContainer {
                         VStack(spacing: 12) {
@@ -63,20 +72,25 @@ struct RecipeDetailView: View {
                                 .foregroundColor(AppColors.textPrimary)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .multilineTextAlignment(.center)
+                                .accessibilityLabel("Таймер действий")
+                                .accessibilityAddTraits(.isHeader)
 
                             if recipe.steps.isEmpty {
                                 Text("Добавьте действия и время — тогда появятся таймеры")
                                     .secondaryText()
                                     .animatedText()
+                                    .accessibilityLabel("Добавьте действия и время — тогда появятся таймеры")
                             } else {
                                 VStack(spacing: 10) {
                                     ForEach(recipe.steps) { step in
                                         StepReadOnlyRow(step: step)
                                     }
                                 }
+                                .accessibilityElement(children: .contain)
                             }
                         }
                     }
+                    .accessibilityElement(children: .contain)
 
                     Button {
                         // Переход в таймер готовки, связанный с рецептом
@@ -90,6 +104,8 @@ struct RecipeDetailView: View {
                     .frame(maxWidth: 260)
                     .padding(.top, 6)
                     .padding(.bottom, 24)
+                    .accessibilityLabel("Приготовить")
+                    .accessibilityHint("Запускает таймеры для шагов приготовления этого рецепта")
                 }
                 .padding(.horizontal, 16)
                 .screenAppear()
@@ -106,6 +122,8 @@ struct RecipeDetailView: View {
                     Image(systemName: "pencil")
                         .font(.system(size: 16, weight: .semibold))
                 }
+                .accessibilityLabel("Редактировать рецепт")
+                .accessibilityHint("Открывает форму редактирования этого рецепта")
             }
         }
         .sheet(isPresented: $showEditSheet) {
@@ -124,7 +142,7 @@ struct RecipeDetailView: View {
         do {
             try viewContext.save()
         } catch {
-            assertionFailure("Core Data save error: \(error)")
+            ErrorHandler.handleCoreDataError(error, message: "Не удалось сохранить изменения рецепта")
         }
     }
 
@@ -147,12 +165,14 @@ private struct IngredientReadOnlyRow: View {
         VStack(spacing: 10) {
             Text(ingredient.name)
                 .recipeNameTitle()
+                .accessibilityLabel("Ингредиент: \(ingredient.name)")
 
             Text(displayQuantity)
                 .font(.system(size: 16, weight: .medium, design: .rounded))
                 .foregroundColor(AppColors.textSecondary)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .multilineTextAlignment(.center)
+                .accessibilityLabel("Количество: \(displayQuantity)")
 
             Button {
                 withAnimation(.easeInOut(duration: 0.2)) {
@@ -181,6 +201,8 @@ private struct IngredientReadOnlyRow: View {
                     .cornerRadius(14)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Переключить единицу измерения")
+            .accessibilityHint("Переключает между граммами, столовыми ложками и штуками")
         }
         .padding(.vertical, 6)
         .overlay(
@@ -189,6 +211,7 @@ private struct IngredientReadOnlyRow: View {
         )
         .background(Color.white.opacity(0.45))
         .cornerRadius(18)
+        .accessibilityElement(children: .contain)
     }
 
     private var displayQuantity: String {
@@ -201,9 +224,8 @@ private struct IngredientReadOnlyRow: View {
         case .pieces:
             value = UnitConverter.gramsToPieces(ingredient.grams)
         }
-        let rounded = (value * 10).rounded() / 10
-        let str = rounded == rounded.rounded() ? "\(Int(rounded))" : "\(rounded)"
-        return "\(str) \(unit.rawValue)"
+        let formatted = UnitConverter.formatQuantity(value, maxFractionDigits: 2)
+        return "\(formatted) \(unit.rawValue)"
     }
 }
 
@@ -217,12 +239,14 @@ private struct StepReadOnlyRow: View {
                 .foregroundColor(AppColors.textPrimary)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .multilineTextAlignment(.center)
+                .accessibilityLabel("Действие: \(step.action)")
 
             Text("\(step.minutes) мин")
                 .font(.system(size: 15, weight: .medium, design: .rounded))
                 .foregroundColor(AppColors.textSecondary)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .multilineTextAlignment(.center)
+                .accessibilityLabel("Время: \(step.minutes) минут")
         }
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity)
@@ -232,6 +256,7 @@ private struct StepReadOnlyRow: View {
             RoundedRectangle(cornerRadius: 18)
                 .stroke(Color.white.opacity(0.6), lineWidth: 1)
         )
+        .accessibilityElement(children: .contain)
     }
 }
 

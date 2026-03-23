@@ -20,6 +20,7 @@ struct AddOrEditRecipeSheet: View {
     let onSave: (RecipeDraft) -> Void
 
     @State private var draft: RecipeDraft
+    @State private var validationError: String?
 
     init(mode: AddEditMode, onSave: @escaping (RecipeDraft) -> Void) {
         self.mode = mode
@@ -89,6 +90,10 @@ struct AddOrEditRecipeSheet: View {
                             }
 
                             Button {
+                                if draft.ingredients.count >= 50 {
+                                    validationError = "Достигнут лимит ингредиентов (50)"
+                                    return
+                                }
                                 withAnimation(.easeInOut(duration: 0.2)) {
                                     draft.ingredients.append(Ingredient(name: "", grams: 0))
                                 }
@@ -115,6 +120,10 @@ struct AddOrEditRecipeSheet: View {
                             
 
                             Button {
+                                if draft.steps.count >= 50 {
+                                    validationError = "Достигнут лимит шагов (50)"
+                                    return
+                                }
                                 withAnimation(.easeInOut(duration: 0.2)) {
                                     draft.steps.append(CookingStep(action: "", minutes: 1))
                                 }
@@ -125,6 +134,15 @@ struct AddOrEditRecipeSheet: View {
                             }
                             .buttonStyle(PillButtonStyle())
                         }
+                    }
+
+                    if let error = validationError {
+                        Text(error)
+                            .font(.system(size: 14, weight: .medium, design: .rounded))
+                            .foregroundColor(AppColors.accentPink)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                            .transition(.opacity)
                     }
 
                     HStack(spacing: 12) {
@@ -138,7 +156,16 @@ struct AddOrEditRecipeSheet: View {
                         .buttonStyle(PillButtonStyle())
 
                         Button {
-                            onSave(cleaned(draft))
+                            let cleanedDraft = cleaned(draft)
+                            if let error = validate(cleanedDraft) {
+                                withAnimation {
+                                    validationError = error
+                                }
+                                return
+                            }
+                            validationError = nil
+                            print("AddOrEditRecipeSheet: сохранение рецепта '\(cleanedDraft.title)'")
+                            onSave(cleanedDraft)
                             dismiss()
                         } label: {
                             Text("Сохранить")
@@ -173,6 +200,33 @@ struct AddOrEditRecipeSheet: View {
             .map { CookingStep(id: $0.id, action: $0.action.trimmingCharacters(in: .whitespacesAndNewlines), minutes: max(1, $0.minutes)) }
             .filter { !$0.action.isEmpty }
         return out
+    }
+
+    private func validate(_ draft: RecipeDraft) -> String? {
+        let trimmedTitle = draft.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedTitle.isEmpty {
+            return "Название рецепта не может быть пустым"
+        }
+        if trimmedTitle.count > 100 {
+            return "Название слишком длинное (максимум 100 символов)"
+        }
+        if draft.ingredients.count > 50 {
+            return "Слишком много ингредиентов (максимум 50)"
+        }
+        for ingredient in draft.ingredients {
+            if ingredient.grams > 100_000 {
+                return "Количество ингредиента \(ingredient.name) слишком большое (максимум 100 000 грамм)"
+            }
+        }
+        if draft.steps.count > 50 {
+            return "Слишком много шагов (максимум 50)"
+        }
+        for step in draft.steps {
+            if step.minutes > 24 * 60 { // больше суток
+                return "Время шага \(step.action) слишком большое (максимум 1440 минут)"
+            }
+        }
+        return nil
     }
 }
 
@@ -328,9 +382,7 @@ private struct IngredientEditorRow: View {
     }
 
     private func format(_ v: Double) -> String {
-        let rounded = (v * 10).rounded() / 10
-        if rounded == rounded.rounded() { return String(Int(rounded)) }
-        return String(rounded)
+        UnitConverter.formatQuantity(v, maxFractionDigits: 2)
     }
 }
 

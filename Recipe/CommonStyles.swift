@@ -1,0 +1,212 @@
+import SwiftUI
+
+// MARK: - Общие стили
+
+struct PrimaryTitleStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        let gradient = LinearGradient(
+            colors: [AppColors.accentPurple, AppColors.accentPink],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+
+        return content
+            .font(.custom(AppFonts.subtitle, size: 32, relativeTo: .title))
+            .foregroundColor(.clear)
+            .overlay(
+                gradient.mask(
+                    content
+                        .font(.custom(AppFonts.subtitle, size: 32, relativeTo: .title))
+                )
+            )
+            .multilineTextAlignment(.center)
+    }
+}
+
+struct SecondaryTextStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(AppFonts.subtitle, size: 16, relativeTo: .body))
+            .foregroundColor(AppColors.textSecondary)
+            .multilineTextAlignment(.center)
+    }
+}
+
+struct RecipeNameTitleStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        let gradient = LinearGradient(
+            colors: [AppColors.accentPurple.opacity(0.8), AppColors.accentPink.opacity(0.8)],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+
+        return content
+            .font(.system(size: 22, weight: .semibold, design: .rounded))
+            .foregroundColor(.clear)
+            .overlay(
+                gradient.mask(
+                    content
+                        .font(.system(size: 22, weight: .semibold, design: .rounded))
+                )
+            )
+            .multilineTextAlignment(.center)
+        
+    }
+}
+struct BeautifulTextStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        let gradient = LinearGradient(
+            colors: [AppColors.cardBackground],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+
+        return content
+            .font(.custom(AppFonts.apple, size: 30, relativeTo: .title))
+            .foregroundColor(.clear)
+            .overlay(
+                gradient.mask(
+                    content
+                        .font(.custom(AppFonts.apple, size: 30, relativeTo: .title))
+                )
+            )
+            .multilineTextAlignment(.center)
+            .shadow(color: Color.black.opacity(0.3), radius: 1, x: 1, y: 1)    }
+}
+
+// MARK: - Анимации появления
+
+struct ScreenAppearModifier: ViewModifier {
+    @State private var isVisible = false
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(isVisible ? 1 : 0)
+            .offset(y: isVisible ? 0 : 20)
+            .animation(.easeOut(duration: 0.35), value: isVisible)
+            .onAppear {
+                isVisible = true
+            }
+    }
+}
+
+struct TextAppearModifier: ViewModifier {
+    @State private var isVisible = false
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(isVisible ? 1 : 0)
+            .scaleEffect(isVisible ? 1 : 0.98)
+            .animation(.easeOut(duration: 0.25), value: isVisible)
+            .onAppear {
+                isVisible = true
+            }
+    }
+}
+
+
+// MARK: - Компоненты
+
+struct PillButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        let gradient = LinearGradient(
+            colors: [
+                AppColors.accentPurple,
+                AppColors.accentPink
+            ],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+
+        return configuration.label
+            .font(.custom(AppFonts.title, size: 18, relativeTo: .body))
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(
+                gradient.opacity(0.6)
+            )
+            .cornerRadius(26)
+            .shadow(color: AppColors.textPrimary.opacity(configuration.isPressed ? 0.08 : 0.4),
+                    radius: configuration.isPressed ? 4 : 4,
+                    x: 4,
+                    y: configuration.isPressed ? 2 : 3)
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.spring(response: 0.25, dampingFraction: 0.8), value: configuration.isPressed)
+    }
+}
+
+struct GradientInputFieldStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        let gradient = LinearGradient(
+            colors: [
+                AppColors.accentPurple,
+                AppColors.accentPink
+            ],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+
+        return content
+            .background(Color.white.opacity(0.9))
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .stroke(gradient.opacity(0.3), lineWidth: 1.4)
+            )
+            .cornerRadius(18)
+    }
+}
+
+struct CardContainer<Content: View>: View {
+    let content: Content
+
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+
+    var body: some View {
+        content
+            .padding(16)
+            .frame(maxWidth: .infinity)
+            .background(AppColors.cardBackground)
+            .cornerRadius(24)
+            .overlay(
+                RoundedRectangle(cornerRadius: 24)
+                    .stroke(AppColors.cardStroke, lineWidth: 1)
+            )
+            .shadow(color: Color.black.opacity(0.05), radius: 3, x: 4, y: 2)
+            .contentShape(Rectangle())
+    }
+}
+
+// MARK: - Расширения View
+
+extension View {
+    func primaryTitle() -> some View {
+        modifier(PrimaryTitleStyle())
+    }
+    
+    func beautifultextstyle() -> some View {
+        modifier(BeautifulTextStyle())
+    }
+
+    func secondaryText() -> some View {
+        modifier(SecondaryTextStyle())
+    }
+
+    func recipeNameTitle() -> some View {
+        modifier(RecipeNameTitleStyle())
+    }
+
+    func screenAppear() -> some View {
+        modifier(ScreenAppearModifier())
+    }
+
+    func animatedText() -> some View {
+        modifier(TextAppearModifier())
+    }
+
+    func gradientInputField() -> some View {
+        modifier(GradientInputFieldStyle())
+    }
+}

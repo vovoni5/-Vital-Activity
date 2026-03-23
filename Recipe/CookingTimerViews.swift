@@ -72,6 +72,8 @@ struct CookingTimerRecipeView: View {
     @ObservedObject var recipe: RecipeEntity
 
     @State private var timers: [StepTimerState] = []
+    @State private var timerSubscription: Cancellable?
+    @State private var anyTimerRunning: Bool = false
 
     var body: some View {
         ZStack {
@@ -93,6 +95,9 @@ struct CookingTimerRecipeView: View {
                         ForEach($timers) { $timer in
                             StepTimerCard(timer: $timer) {
                                 playTripleBeep()
+                            }
+                            .onChange(of: timer.isRunning) { _, newValue in
+                                updateTimerSubscription()
                             }
                         }
 
@@ -121,13 +126,11 @@ struct CookingTimerRecipeView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             resetTimers()
+            updateTimerSubscription()
         }
         .onDisappear {
-            resetTimers()
-        }
-        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { now in
-            _ = now
-            tickTimers()
+            timerSubscription?.cancel()
+            timerSubscription = nil
         }
     }
 
@@ -135,15 +138,38 @@ struct CookingTimerRecipeView: View {
         timers = recipe.steps.map { StepTimerState(stepID: $0.id, action: $0.action, totalSeconds: max(0, $0.minutes) * 60) }
     }
 
+    private func updateTimerSubscription() {
+        let hasRunning = timers.contains { $0.isRunning && !$0.isDone }
+        anyTimerRunning = hasRunning
+        
+        if hasRunning {
+            if timerSubscription == nil {
+                timerSubscription = Timer.publish(every: 1, on: .main, in: .common)
+                    .autoconnect()
+                    .sink { _ in
+                        tickTimers()
+                    }
+            }
+        } else {
+            timerSubscription?.cancel()
+            timerSubscription = nil
+        }
+    }
+
     private func tickTimers() {
+        var anyStillRunning = false
         for idx in timers.indices {
             guard timers[idx].isRunning, !timers[idx].isDone else { continue }
+            anyStillRunning = true
             timers[idx].remainingSeconds = max(0, timers[idx].remainingSeconds - 1)
             if timers[idx].remainingSeconds == 0 {
                 timers[idx].isRunning = false
                 timers[idx].isDone = true
                 timers[idx].justFinishedToken = UUID()
             }
+        }
+        if !anyStillRunning {
+            updateTimerSubscription()
         }
     }
 }

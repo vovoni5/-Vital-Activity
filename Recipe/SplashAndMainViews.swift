@@ -46,9 +46,8 @@ struct MainMenuView: View {
             ScrollView {
                 VStack(spacing: 32) {
                     VStack(spacing: 8) {
-                        Text("Домашняя кухня")
-                            .font(.system(size: 20, weight: .medium, design: .rounded))
-                            .foregroundColor(AppColors.textSecondary)
+                        Text("Vital Activity")
+                            .beautifultextstyle()
                             .animatedText()
 
                         Text("Ваш помощник в рецептах")
