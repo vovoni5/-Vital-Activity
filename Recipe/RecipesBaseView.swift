@@ -179,6 +179,7 @@ private struct RecipeRow: View {
             } label: {
                 Label("Удалить", systemImage: "trash")
             }
+            .foregroundColor(AppColors.accentPink)
             .tint(AppColors.accentPink)
         }
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
@@ -187,6 +188,7 @@ private struct RecipeRow: View {
             } label: {
                 Label("В рацион", systemImage: "text.badge.plus")
             }
+            .foregroundColor(AppColors.accentPurple)
             .tint(AppColors.accentPurple)
         }
     }

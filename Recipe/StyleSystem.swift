@@ -11,6 +11,7 @@ struct AppColors {
     static let cardBackground = Color.white.opacity(0.96)
     static let cardStroke = Color.white.opacity(0.6)
     static let textPole = Color(red: 0.80, green: 0.75, blue: 0.88)
+    static let swipeActionText = Color(red: 0.80, green: 0.75, blue: 0.88) // по умолчанию textPole
 }
 
 enum AppFonts {

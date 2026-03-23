@@ -51,6 +51,7 @@ struct MenuPlannerListView: View {
                             } label: {
                                 Label("Удалить", systemImage: "trash")
                             }
+                            .foregroundColor(AppColors.swipeActionText)
                         }
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 12, trailing: 16))
@@ -276,6 +277,7 @@ struct MealPlanDetailView: View {
                             } label: {
                                 Label("Убрать", systemImage: "minus.circle")
                             }
+                            .foregroundColor(AppColors.swipeActionText)
                         }
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 12, trailing: 16))
