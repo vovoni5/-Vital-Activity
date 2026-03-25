@@ -126,6 +126,7 @@ struct PillButtonStyle: ButtonStyle {
             .background(
                 gradient.opacity(0.6)
             )
+            .glassEffect()
             .cornerRadius(26)
             .shadow(color: AppColors.textPrimary.opacity(configuration.isPressed ? 0.08 : 0.4),
                     radius: configuration.isPressed ? 4 : 4,
