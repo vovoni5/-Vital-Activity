@@ -37,7 +37,7 @@ struct MenuPlannerListView: View {
                             CardContainer {
                                 Text(plan.name ?? "")
                                     .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                    .foregroundColor(AppColors.textPrimary)
+                                    .foregroundColor(.secondary)
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .multilineTextAlignment(.center)
                             }
@@ -63,7 +63,7 @@ struct MenuPlannerListView: View {
                             VStack(spacing: 8) {
                                 Text("Рационов пока нет")
                                     .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                    .foregroundColor(AppColors.textPrimary)
+                                    .foregroundColor(.secondary)
                                     .frame(maxWidth: .infinity)
                                     .multilineTextAlignment(.center)
                                 Text("Нажмите +, чтобы создать первый рацион")
@@ -142,13 +142,13 @@ private struct AddMealPlanSheet: View {
                     VStack(spacing: 10) {
                         Text("Название")
                             .font(.system(size: 14, weight: .medium, design: .rounded))
-                            .foregroundColor(AppColors.textPrimary)
+                            .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity)
                             .multilineTextAlignment(.center)
 
                         TextField("", text: $name)
                             .textFieldStyle(.plain)
-                            .foregroundColor(AppColors.textPrimary)
+                            .foregroundColor(AppColors.textSecondary)
                             .padding(.vertical, 10)
                             .padding(.horizontal, 12)
                             .frame(maxWidth: .infinity, alignment: .center)
@@ -166,7 +166,6 @@ private struct AddMealPlanSheet: View {
                             .multilineTextAlignment(.center)
                     }
                     .buttonStyle(PillButtonStyle())
-                    //.opacity(0.6)
 
                     Button {
                         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -223,21 +222,15 @@ struct MealPlanDetailView: View {
 
             VStack(spacing: 14) {
                 VStack(spacing: 6) {
-                    Text("Рацион")
-                        .font(.system(size: 18, weight: .medium, design: .rounded))
-                        .foregroundColor(AppColors.textPrimary)
-                        .animatedText()
-
                     TextField("", text: $nameText)
-                        .font(.system(size: 28, weight: .semibold, design: .rounded))
-                        .foregroundColor(AppColors.textPrimary)
+                        .font(.system(size: 32, weight: .semibold, design: .rounded))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 10)
-                        .gradientInputField()
                         .onSubmit {
                             commitName()
                         }
+                        .primaryTitle()
                         .animatedText()
                 }
                 .padding(.top, 18)
@@ -265,7 +258,7 @@ struct MealPlanDetailView: View {
                             CardContainer {
                                 Text(recipe.title ?? "")
                                     .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                    .foregroundColor(AppColors.textPrimary)
+                                    .foregroundColor(Color("BrandTextColor"))
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .multilineTextAlignment(.center)
                             }
@@ -291,7 +284,7 @@ struct MealPlanDetailView: View {
                             VStack(spacing: 8) {
                                 Text("Список пуст")
                                     .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                    .foregroundColor(AppColors.textPrimary)
+                                    .foregroundColor(.secondary)
                                     .frame(maxWidth: .infinity)
                                     .multilineTextAlignment(.center)
                                 Text("Добавьте рецепты с помощью кнопки выше")
@@ -397,7 +390,7 @@ private struct RecipePickerSheet: View {
                                     VStack(spacing: 6) {
                                         Text(recipe.title ?? "")
                                             .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                            .foregroundColor(isDisabled ? AppColors.textSecondary : AppColors.textPrimary)
+                                            .foregroundColor(Color("BrandTextColor"))
                                             .frame(maxWidth: .infinity, alignment: .center)
                                             .multilineTextAlignment(.center)
                                         if isDisabled {

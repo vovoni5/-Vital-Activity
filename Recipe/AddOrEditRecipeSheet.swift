@@ -5,7 +5,7 @@ import SwiftUI
 struct RecipeDraft: Equatable {
     var title: String = ""
     var detailsText: String = ""
-    var category: RecipeCategory = .breakfast
+    var category: RecipeCategory = .all
     var ingredients: [Ingredient] = []
     var steps: [CookingStep] = []
 }
@@ -70,12 +70,12 @@ struct AddOrEditRecipeSheet: View {
                             VStack(spacing: 8) {
                                 Text("Категория")
                                     .font(.system(size: 14, weight: .medium, design: .rounded))
-                                    .foregroundColor(AppColors.textSecondary)
+                                    .foregroundColor(.primary)
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .multilineTextAlignment(.center)
 
                                 Picker("Категория", selection: $draft.category) {
-                                    ForEach(RecipeCategory.allCases.filter { $0 != .all }) { cat in
+                                    ForEach(RecipeCategory.allCases) { cat in
                                         Text(cat.rawValue).tag(cat)
                                     }
                                 }
@@ -89,7 +89,7 @@ struct AddOrEditRecipeSheet: View {
                         VStack(spacing: 12) {
                             Text("Ингредиенты")
                                 .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                .foregroundColor(AppColors.textPrimary)
+                                .foregroundColor(.secondary)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .multilineTextAlignment(.center)
 
@@ -118,7 +118,7 @@ struct AddOrEditRecipeSheet: View {
                         VStack(spacing: 12) {
                             Text("Таймер действий")
                                 .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                .foregroundColor(AppColors.textPrimary)
+                                .foregroundColor(.secondary)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .multilineTextAlignment(.center)
 
@@ -249,7 +249,7 @@ private struct CenteredField: View {
         VStack(spacing: 6) {
             Text(title)
                 .font(.system(size: 14, weight: .medium, design: .rounded))
-                .foregroundColor(AppColors.textPrimary)
+                .foregroundColor(.secondary)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .multilineTextAlignment(.center)
 

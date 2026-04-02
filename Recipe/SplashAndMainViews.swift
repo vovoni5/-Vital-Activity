@@ -16,7 +16,7 @@ struct SplashView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 220, height: 220)
-                    .shadow(color: AppColors.accentPurple.opacity(0.5), radius: 25, x: 0, y: 18)
+                    .shadow(color: AppColors.accentPurple.opacity(0.4), radius: 25, x: 0, y: 0)
                     .scaleEffect(glow ? 1.03 : 0.97)
                     .animation(
                         .easeInOut(duration: 1.4)

@@ -10,6 +10,8 @@ struct AppColors {
     static let accentPurple = Color(red: 0.47, green: 0.20, blue: 0.95)
     /// Мягкий белый с небольшой прозрачностью.
     static let softWhite = Color.white.opacity(0.95)
+    /// Мягкий черный с небольшой прозрачностью.
+    static let softBlack = Color.black.opacity(0.95)
     /// Основной цвет текста.
     static let textPrimary = Color(red: 0.16, green: 0.11, blue: 0.25)
     /// Вторичный цвет текста.
@@ -19,7 +21,7 @@ struct AppColors {
     /// Обводка карточек.
     static let cardStroke = Color.white.opacity(0.6)
     /// Цвет для полей ввода и декоративных элементов.
-    static let textPole = Color(red: 0.80, green: 0.75, blue: 0.88)
+    static let textPole = Color(red: 0.72, green: 0.675, blue: 0.792)
     /// Цвет текста в действиях свайпа.
     static let swipeActionText = Color(red: 0.80, green: 0.75, blue: 0.88)
 }
@@ -42,14 +44,66 @@ enum AppFonts {
 
 /// Фон с многослойным градиентом и текстурой.
 /// Используется как фон для большинства экранов.
+/// Автоматически адаптируется к светлой/тёмной теме iOS.
 struct AppGradientBackground: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
+    var body: some View {
+        if colorScheme == .dark {
+            AppGradientBackgroundDark()
+        } else {
+            ZStack {
+                LinearGradient(
+                    colors: [
+                        AppColors.softWhite,
+                        Color(red: 0.99, green: 0.88, blue: 1.0),
+                        Color(red: 0.96, green: 0.78, blue: 0.99)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+
+                RadialGradient(
+                    gradient: Gradient(colors: [
+                        AppColors.accentPurple.opacity(0.55),
+                        .clear
+                    ]),
+                    center: .topTrailing,
+                    startRadius: 40,
+                    endRadius: 420
+                )
+
+                RadialGradient(
+                    gradient: Gradient(colors: [
+                        AppColors.accentPink.opacity(0.55),
+                        .clear
+                    ]),
+                    center: .bottomLeading,
+                    startRadius: 60,
+                    endRadius: 420
+                )
+                Image("white-abstract-texture-background")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    .clipped()
+                    .opacity(0.1)
+            }
+            .background(Color.white)
+        }
+    }
+}
+
+/// Тёмный вариант фона с многослойным градиентом и текстурой.
+/// Используется в тёмной теме iOS.
+struct AppGradientBackgroundDark: View {
     var body: some View {
         ZStack {
             LinearGradient(
                 colors: [
-                    AppColors.softWhite,
-                    Color(red: 0.99, green: 0.88, blue: 1.0),
-                    Color(red: 0.96, green: 0.78, blue: 0.99)
+                    AppColors.softBlack,
+                    Color(red: 0.15, green: 0.1, blue: 0.25),
+                    Color(red: 0.25, green: 0.1, blue: 0.35)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -57,7 +111,7 @@ struct AppGradientBackground: View {
 
             RadialGradient(
                 gradient: Gradient(colors: [
-                    AppColors.accentPurple.opacity(0.55),
+                    AppColors.accentPurple.opacity(0.3),
                     .clear
                 ]),
                 center: .topTrailing,
@@ -67,7 +121,7 @@ struct AppGradientBackground: View {
 
             RadialGradient(
                 gradient: Gradient(colors: [
-                    AppColors.accentPink.opacity(0.55),
+                    AppColors.accentPink.opacity(0.3),
                     .clear
                 ]),
                 center: .bottomLeading,
@@ -79,8 +133,8 @@ struct AppGradientBackground: View {
                 .scaledToFill()
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                 .clipped()
-                .opacity(0.1)
+                .opacity(0.05)
         }
-        .background(Color.white)
+        .background(Color.black)
     }
 }

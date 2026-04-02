@@ -41,14 +41,14 @@ struct SecondaryTextStyle: ViewModifier {
 struct RecipeNameTitleStyle: ViewModifier {
     func body(content: Content) -> some View {
         let gradient = LinearGradient(
-            colors: [AppColors.accentPurple.opacity(0.8), AppColors.accentPink.opacity(0.8)],
+            colors: [AppColors.accentPink.opacity(0.0)],
             startPoint: .leading,
             endPoint: .trailing
         )
-
+        
         return content
             .font(.system(size: 22, weight: .semibold, design: .rounded))
-            .foregroundColor(.clear)
+            .foregroundColor(Color("BrandTextColor"))
             .overlay(
                 gradient.mask(
                     content
@@ -96,7 +96,14 @@ struct ScreenAppearModifier: ViewModifier {
             .offset(y: isVisible ? 0 : 20)
             .animation(.easeOut(duration: 0.35), value: isVisible)
             .onAppear {
-                isVisible = true
+                withAnimation(.easeOut(duration: 0.35)) {
+                    isVisible = true
+                }
+            }
+            .onDisappear {
+                withAnimation(.easeOut(duration: 0.25)) {
+                    isVisible = false
+                }
             }
     }
 }
@@ -109,10 +116,15 @@ struct TextAppearModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .opacity(isVisible ? 1 : 0)
-            .scaleEffect(isVisible ? 1 : 0.98)
-            .animation(.easeOut(duration: 0.25), value: isVisible)
+            .scaleEffect(isVisible ? 1 : 0.9)
+            .offset(y: isVisible ? 0 : 10)
+            .animation(.spring(response: 0.4, dampingFraction: 0.7, blendDuration: 0.5), value: isVisible)
             .onAppear {
-                isVisible = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    withAnimation {
+                        isVisible = true
+                    }
+                }
             }
     }
 }
@@ -164,7 +176,7 @@ struct GradientInputFieldStyle: ViewModifier {
         )
 
         return content
-            .background(Color.white.opacity(0.9))
+            .glassEffect(.regular.tint(.white.opacity(0.8)), in: .rect(cornerRadius: 18))
             .overlay(
                 RoundedRectangle(cornerRadius: 18)
                     .stroke(gradient.opacity(0.3), lineWidth: 1.4)
@@ -186,12 +198,8 @@ struct CardContainer<Content: View>: View {
         content
             .padding(16)
             .frame(maxWidth: .infinity)
-            .background(AppColors.cardBackground)
+            .glassEffect(.clear.tint(.white.opacity(0.0)), in: .rect(cornerRadius: 24))
             .cornerRadius(24)
-            .overlay(
-                RoundedRectangle(cornerRadius: 24)
-                    .stroke(AppColors.cardStroke, lineWidth: 1)
-            )
             .shadow(color: Color.black.opacity(0.05), radius: 3, x: 4, y: 2)
             .contentShape(Rectangle())
     }
@@ -235,3 +243,4 @@ extension View {
         modifier(GradientInputFieldStyle())
     }
 }
+

@@ -36,7 +36,7 @@ struct CookingTimerRootView: View {
                                 CardContainer {
                                     Text(recipe.title ?? "")
                                         .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                        .foregroundColor(AppColors.textPrimary)
+                                        .foregroundColor(Color("BrandTextColor"))
                                         .frame(maxWidth: .infinity, alignment: .center)
                                         .multilineTextAlignment(.center)
                                 }
@@ -49,7 +49,7 @@ struct CookingTimerRootView: View {
                                 VStack(spacing: 8) {
                                     Text("Нет рецептов")
                                         .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                        .foregroundColor(AppColors.textPrimary)
+                                        .foregroundColor(.secondary)
                                         .frame(maxWidth: .infinity)
                                         .multilineTextAlignment(.center)
                                     Text("Сначала добавьте рецепты в базе")
@@ -110,7 +110,7 @@ struct CookingTimerRecipeView: View {
                                 VStack(spacing: 8) {
                                     Text("Шагов нет")
                                         .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                        .foregroundColor(AppColors.textPrimary)
+                                        .foregroundColor( .secondary)
                                         .frame(maxWidth: .infinity)
                                         .multilineTextAlignment(.center)
                                     Text("Добавьте действия и время в рецепте")
@@ -217,7 +217,7 @@ private struct StepTimerCard: View {
             VStack(spacing: 12) {
                 Text(timer.action.isEmpty ? "Действие" : timer.action)
                     .font(.system(size: 18, weight: .semibold, design: .rounded))
-                    .foregroundColor(AppColors.textPrimary)
+                    .foregroundColor(Color("BrandTextColor"))
                     .frame(maxWidth: .infinity)
                     .multilineTextAlignment(.center)
                     .animatedText()
@@ -225,7 +225,7 @@ private struct StepTimerCard: View {
                 if timer.isDone {
                     Text("Готово!")
                         .font(.system(size: 22, weight: .semibold, design: .rounded))
-                        .foregroundColor(AppColors.accentPurple)
+                        .foregroundColor(.green)
                         .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                         .scaleEffect(finishedPulse ? 1.03 : 0.98)
@@ -236,7 +236,7 @@ private struct StepTimerCard: View {
                 } else {
                     Text(timeString(timer.remainingSeconds))
                         .font(.system(size: 28, weight: .semibold, design: .rounded))
-                        .foregroundColor(AppColors.textPrimary)
+                        .foregroundColor(.secondary)
                         .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                         .transition(.opacity.combined(with: .scale))

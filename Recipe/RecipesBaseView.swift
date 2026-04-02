@@ -257,7 +257,7 @@ private struct EmptyRecipesState: View {
             VStack(spacing: 8) {
                 Text("Пока пусто")
                     .font(.system(size: 18, weight: .semibold, design: .rounded))
-                    .foregroundColor(AppColors.textPrimary)
+                    .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .multilineTextAlignment(.center)
                     .accessibilityLabel("Пока пусто")
@@ -311,24 +311,14 @@ private struct CategoryChips: View {
                             .frame(height: 34)
                             .padding(.horizontal, 14)
                             .frame(maxHeight: 34)
-                            .background(
-                                Group {
-                                    if selected == cat {
-                                        LinearGradient(
-                                            colors: [AppColors.accentPurple.opacity(0.8), AppColors.accentPink.opacity(0.8)],
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        )
-                                    } else {
-                                        Color.white.opacity(0.8)
-                                    }
-                                }
+                            .glassEffect(
+                                selected == cat
+                                ? .regular.tint(AppColors.accentPurple.opacity(0.8))
+                                : .regular.tint(.white.opacity(0.6)),
+                                in: .rect(cornerRadius: 18)
                             )
+
                             .cornerRadius(18)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 18)
-                                    .stroke(Color.white.opacity(0.6), lineWidth: 1)
-                            )
                             .multilineTextAlignment(.center)
                     }
                     .buttonStyle(.plain)

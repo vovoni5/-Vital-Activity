@@ -24,7 +24,9 @@ struct RecipeApp: App {
     let persistenceController = PersistenceController.shared
 
     init() {
-        let accent = UIColor(red: 0.47, green: 0.20, blue: 0.95, alpha: 1.0)
+        let accent = UIColor(named: "AccentColor") ?? UIColor(red: 0.47, green: 0.20, blue: 0.95, alpha: 1.0)
+        // Устанавливаем акцентный цвет для всех системных элементов
+        UIView.appearance().tintColor = accent
         UINavigationBar.appearance().tintColor = accent
         UIBarButtonItem.appearance().tintColor = accent
         // Устанавливаем цвет курсора в текстовых полях

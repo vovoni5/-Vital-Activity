@@ -33,7 +33,7 @@ struct MealPlanPickerSheet: View {
                                 CardContainer {
                                     Text(plan.name ?? "")
                                         .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                        .foregroundColor(AppColors.textPrimary)
+                                        .foregroundColor(.secondary)
                                         .frame(maxWidth: .infinity, alignment: .center)
                                         .multilineTextAlignment(.center)
                                 }

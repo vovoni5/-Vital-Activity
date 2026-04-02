@@ -45,7 +45,7 @@ struct RecipeDetailView: View {
                         VStack(spacing: 12) {
                             Text("Ингредиенты")
                                 .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                .foregroundColor(AppColors.textPrimary)
+                                .foregroundColor(.secondary)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .multilineTextAlignment(.center)
                                 .accessibilityLabel("Ингредиенты")
@@ -73,7 +73,7 @@ struct RecipeDetailView: View {
                         VStack(spacing: 12) {
                             Text("Таймер действий")
                                 .font(.system(size: 18, weight: .semibold, design: .rounded))
-                                .foregroundColor(AppColors.textPrimary)
+                                .foregroundColor(.secondary)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .multilineTextAlignment(.center)
                                 .accessibilityLabel("Таймер действий")
@@ -174,7 +174,7 @@ private struct IngredientReadOnlyRow: View {
 
             Text(displayQuantity)
                 .font(.system(size: 16, weight: .medium, design: .rounded))
-                .foregroundColor(AppColors.textSecondary)
+                .foregroundColor(.secondary)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .multilineTextAlignment(.center)
                 .accessibilityLabel("Количество: \(displayQuantity)")
@@ -211,12 +211,8 @@ private struct IngredientReadOnlyRow: View {
             .accessibilityHint("Переключает между граммами, столовыми ложками и штуками")
         }
         .padding(.vertical, 6)
-        .overlay(
-            RoundedRectangle(cornerRadius: 18)
-                .stroke(Color.white.opacity(0.6), lineWidth: 1)
-        )
-        .background(Color.white.opacity(0.45))
-        .cornerRadius(18)
+        .glassEffect(.clear.tint(.white.opacity(0.05)), in: .rect(cornerRadius: 18))
+        .shadow(color: Color.black.opacity(0.09), radius: 3, x: -4, y: 4)
         .accessibilityElement(children: .contain)
     }
 
@@ -258,12 +254,8 @@ private struct StepReadOnlyRow: View {
         }
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity)
-        .background(Color.white.opacity(0.45))
-        .cornerRadius(18)
-        .overlay(
-            RoundedRectangle(cornerRadius: 18)
-                .stroke(Color.white.opacity(0.6), lineWidth: 1)
-        )
+        .glassEffect(.clear.tint(.white.opacity(0.6)), in: .rect(cornerRadius: 18))
+        .shadow(color: Color.black.opacity(0.09), radius: 3, x: -4, y: 4)
         .accessibilityElement(children: .contain)
     }
 }
