@@ -1,36 +1,18 @@
-//
-//  RecipeApp.swift
-//  Recipe
-//
-//  Created by Владимир Косачев on 11.03.2026.
-//
-
-/// Главная точка входа приложения.
-///
-/// Содержит:
-/// - Инициализацию Core Data стека (PersistenceController)
-/// - Настройку глобальных цветов интерфейса (акцентный цвет для навигации, текстовых полей)
-/// - Корневой View (ContentView) с передачей контекста Core Data
-///
-/// Файл: RecipeApp.swift
-/// Модуль: Recipe
-///
-
 import SwiftUI
 import CoreData
 
 @main
 struct RecipeApp: App {
+    // Зависимости
     let persistenceController = PersistenceController.shared
     @StateObject private var timerManager = TimerManager.shared
 
     init() {
+        // Настройка акцентного цвета (фиолетовый)
         let accent = UIColor(red: 0.47, green: 0.20, blue: 0.95, alpha: 1.0)
-        // Устанавливаем акцентный цвет для всех системных элементов
         UIView.appearance().tintColor = accent
         UINavigationBar.appearance().tintColor = accent
         UIBarButtonItem.appearance().tintColor = accent
-        // Устанавливаем цвет курсора в текстовых полях
         UITextField.appearance().tintColor = accent
         UITextView.appearance().tintColor = accent
     }

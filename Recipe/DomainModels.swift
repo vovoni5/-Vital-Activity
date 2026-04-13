@@ -1,6 +1,6 @@
 import Foundation
 
-/// Категории рецептов, используемые для фильтрации и классификации.
+// MARK: - RecipeCategory
 enum RecipeCategory: String, CaseIterable, Identifiable {
     case all = "Все рецепты"
     case breakfast = "Завтраки"
@@ -13,7 +13,7 @@ enum RecipeCategory: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    /// Значение для хранения в Core Data (без локализации).
+    // Значение для хранения в Core Data (без локализации)
     var storageValue: String {
         switch self {
         case .all: return "Все"
@@ -22,16 +22,14 @@ enum RecipeCategory: String, CaseIterable, Identifiable {
     }
 }
 
-/// Ингредиент рецепта с названием, количеством и единицей измерения.
+// MARK: - Ingredient
 struct Ingredient: Codable, Hashable, Identifiable {
     var id: UUID = UUID()
     var name: String
-    /// Количество в выбранной единице измерения.
     var quantity: Double
-    /// Единица измерения количества.
     var unit: QuantityUnit
     
-    /// Количество в граммах (вычисляемое свойство для обратной совместимости).
+    // Вычисляемое свойство для работы в граммах (обратная совместимость)
     var grams: Double {
         get {
             switch unit {
@@ -44,7 +42,7 @@ struct Ingredient: Codable, Hashable, Identifiable {
             }
         }
         set {
-            // При установке граммов пересчитываем quantity в текущей unit
+            // Пересчет граммов в текущую единицу измерения
             switch unit {
             case .grams:
                 quantity = newValue
@@ -63,7 +61,7 @@ struct Ingredient: Codable, Hashable, Identifiable {
         self.unit = unit
     }
     
-    /// Инициализатор для обратной совместимости со старыми данными (только граммы).
+    // Инициализатор для обратной совместимости (только граммы)
     init(id: UUID = UUID(), name: String, grams: Double) {
         self.id = id
         self.name = name
@@ -71,6 +69,7 @@ struct Ingredient: Codable, Hashable, Identifiable {
         self.unit = .grams
     }
     
+    // MARK: - Codable
     private enum CodingKeys: String, CodingKey {
         case id, name, quantity, unit, grams
     }
@@ -80,7 +79,7 @@ struct Ingredient: Codable, Hashable, Identifiable {
         id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
         name = try container.decode(String.self, forKey: .name)
         
-        // Пытаемся декодировать quantity и unit (новый формат)
+        // Декодирование нового формата (quantity + unit) или старого (grams)
         if let quantity = try? container.decode(Double.self, forKey: .quantity),
            let unitRaw = try? container.decode(String.self, forKey: .unit),
            let unit = QuantityUnit(rawValue: unitRaw) {
@@ -105,14 +104,14 @@ struct Ingredient: Codable, Hashable, Identifiable {
     }
 }
 
-/// Шаг приготовления с описанием действия и временем в минутах.
+// MARK: - CookingStep
 struct CookingStep: Codable, Hashable, Identifiable {
     var id: UUID = UUID()
     var action: String
     var minutes: Int
 }
 
-/// Единицы измерения количества ингредиентов.
+// MARK: - QuantityUnit
 enum QuantityUnit: String, CaseIterable, Identifiable {
     case grams = "г"
     case tbsp = "ст. л."
@@ -121,35 +120,29 @@ enum QuantityUnit: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-/// Конвертер единиц измерения для ингредиентов.
+// MARK: - UnitConverter
 enum UnitConverter {
-    /// Универсальная бытовая конверсия: 1 столовая ложка ≈ 15 г.
+    // Коэффициенты конвертации
     static let gramsPerTbsp: Double = 15.0
-
-    /// Условная бытовая конверсия для штук (например, среднего продукта) — 1 шт ≈ 50 г.
     static let gramsPerPiece: Double = 50.0
 
-    /// Конвертирует граммы в столовые ложки.
     static func gramsToTbsp(_ grams: Double) -> Double {
         grams / gramsPerTbsp
     }
 
-    /// Конвертирует столовые ложки в граммы.
     static func tbspToGrams(_ tbsp: Double) -> Double {
         tbsp * gramsPerTbsp
     }
 
-    /// Конвертирует граммы в штуки.
     static func gramsToPieces(_ grams: Double) -> Double {
         grams / gramsPerPiece
     }
 
-    /// Конвертирует штуки в граммы.
     static func piecesToGrams(_ pieces: Double) -> Double {
         pieces * gramsPerPiece
     }
 
-    /// Форматирует количество для отображения, убирая лишние нули.
+    // Форматирование количества для отображения
     static func formatQuantity(_ value: Double, maxFractionDigits: Int = 2) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -161,16 +154,12 @@ enum UnitConverter {
     }
 }
 
+// MARK: - String Extension
 extension String {
-    /// Обрезает ссылку для отображения, оставляя только первую строку (до первого перевода строки) и ограничивая длину.
-    /// Если ссылка многострочная, возвращается только первая строка.
-    /// Если длина превышает maxLength, добавляется многоточие.
+    // Обрезка ссылки для отображения (первая строка, ограничение длины)
     func truncatedLink(maxLength: Int = 50) -> String {
-        // Убираем пробелы и переносы строк по краям
         let trimmed = self.trimmingCharacters(in: .whitespacesAndNewlines)
-        // Берем первую строку
         let firstLine = trimmed.components(separatedBy: .newlines).first ?? trimmed
-        // Если длина превышает maxLength, обрезаем и добавляем многоточие
         if firstLine.count > maxLength {
             let index = firstLine.index(firstLine.startIndex, offsetBy: maxLength - 3)
             return String(firstLine[..<index]) + "..."
@@ -178,4 +167,3 @@ extension String {
         return firstLine
     }
 }
-

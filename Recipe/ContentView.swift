@@ -1,22 +1,3 @@
-//
-//  ContentView.swift
-//  Recipe
-//
-//  Created by Владимир Косачев on 11.03.2026.
-//
-
-/// Корневой View приложения.
-///
-/// Содержит:
-/// - Splash‑экран с анимацией
-/// - Главное меню (MainMenuView)
-/// - Обработку навигации к таймеру приготовления через уведомления
-/// - Управление переходами между сплеш‑экраном и основным интерфейсом
-///
-/// Файл: ContentView.swift
-/// Модуль: Recipe
-///
-
 import SwiftUI
 import CoreData
 
@@ -56,10 +37,12 @@ struct ContentView: View {
         .environment(\.managedObjectContext, viewContext)
         .ignoresSafeArea()
         .onAppear {
+            // Анимация появления сплеш-экрана
             withAnimation(.easeOut(duration: 0.5)) {
                 showSplash = true
             }
 
+            // Через 2 секунды скрываем сплеш и показываем главное меню
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 withAnimation(.easeInOut(duration: 0.4)) {
                     showSplash = false
@@ -70,6 +53,7 @@ struct ContentView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .openRecipeTimer)) { notif in
+            // Обработка уведомления для открытия таймера рецепта
             if let id = notif.userInfo?["recipeObjectID"] as? NSManagedObjectID {
                 pendingRecipeObjectID = id
             }
