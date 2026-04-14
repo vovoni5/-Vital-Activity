@@ -9,6 +9,7 @@ struct RecipeDetailView: View {
     @ObservedObject var recipe: RecipeEntity
 
     @State private var showEditSheet = false
+    @State private var showingAddToListAlert = false
 
     var body: some View {
         ZStack {
@@ -145,16 +146,27 @@ struct RecipeDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        showEditSheet = true
+                HStack(spacing: 16) {
+                    Button {
+                        addToShoppingList()
+                    } label: {
+                        Image(systemName: "cart.badge.plus")
+                            .font(.system(size: 16, weight: .semibold))
                     }
-                } label: {
-                    Image(systemName: "pencil")
-                        .font(.system(size: 16, weight: .semibold))
+                    .accessibilityLabel("Добавить в список покупок")
+                    .accessibilityHint("Добавляет все ингредиенты рецепта в список покупок")
+                    
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showEditSheet = true
+                        }
+                    } label: {
+                        Image(systemName: "pencil")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                    .accessibilityLabel("Редактировать рецепт")
+                    .accessibilityHint("Открывает форму редактирования этого рецепта")
                 }
-                .accessibilityLabel("Редактировать рецепт")
-                .accessibilityHint("Открывает форму редактирования этого рецепта")
             }
         }
         .sheet(isPresented: $showEditSheet) {
@@ -186,6 +198,27 @@ struct RecipeDetailView: View {
             object: nil,
             userInfo: ["recipeObjectID": recipe.objectID]
         )
+    }
+    
+    /// Добавляет все ингредиенты рецепта в список покупок.
+    private func addToShoppingList() {
+        let repository = ShoppingListRepository(context: viewContext)
+        do {
+            try repository.addIngredients(from: recipe)
+            // Показываем уведомление об успехе
+            let alert = UIAlertController(
+                title: "Добавлено в список покупок",
+                message: "Все ингредиенты рецепта добавлены.",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let rootVC = windowScene.windows.first?.rootViewController {
+                rootVC.present(alert, animated: true)
+            }
+        } catch {
+            ErrorHandler.handleCoreDataError(error, message: "Не удалось добавить ингредиенты в список покупок")
+        }
     }
 }
 

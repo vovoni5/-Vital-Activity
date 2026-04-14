@@ -78,6 +78,15 @@ struct MainMenuView: View {
                         .buttonStyle(PillButtonStyle())
 
                         NavigationLink {
+                            ShoppingListView()
+                        } label: {
+                            Text("Список покупок")
+                                .frame(maxWidth: .infinity)
+                                .multilineTextAlignment(.center)
+                        }
+                        .buttonStyle(PillButtonStyle())
+
+                        NavigationLink {
                             CookingTimerRootView()
                         } label: {
                             Text("Таймер готовки")

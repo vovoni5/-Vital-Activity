@@ -112,7 +112,7 @@ struct CookingStep: Codable, Hashable, Identifiable {
 }
 
 // MARK: - QuantityUnit
-enum QuantityUnit: String, CaseIterable, Identifiable {
+enum QuantityUnit: String, CaseIterable, Identifiable, Codable {
     case grams = "г"
     case tbsp = "ст. л."
     case pieces = "шт"

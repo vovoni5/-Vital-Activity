@@ -14,4 +14,12 @@
             <attribute name="stepsData" optional="YES" attributeType="Binary"/>
             <attribute name="title" attributeType="String"/>
         </entity>
+    <entity name="ShoppingItemEntity" representedClassName="ShoppingItemEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="quantity" attributeType="Double"/>
+        <attribute name="unit" attributeType="String"/>
+        <attribute name="isPurchased" attributeType="Boolean" defaultValueString="NO"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+    </entity>
 </model>
