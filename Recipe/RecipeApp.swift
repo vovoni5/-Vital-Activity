@@ -19,9 +19,6 @@ struct RecipeApp: App {
         UITextField.appearance().tintColor = accent
         UITextView.appearance().tintColor = accent
         
-        // Запрос разрешения на уведомления при первом запуске
-        requestNotificationPermission()
-        
         // Настройка обработчика нажатия на уведомление
         setupNotificationDelegate()
     }
@@ -33,6 +30,8 @@ struct RecipeApp: App {
                 .environmentObject(timerManager)
                 .environmentObject(notificationManager)
                 .onAppear {
+                    // Запрос разрешения на уведомления при первом запуске
+                    requestNotificationPermission()
                     // Проверка пропущенных таймеров при запуске
                     checkMissedTimers()
                 }
@@ -51,7 +50,7 @@ struct RecipeApp: App {
         if !hasRequested {
             // Запрашиваем разрешение с небольшой задержкой, чтобы не блокировать запуск
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                notificationManager.requestAuthorization { granted in
+                NotificationManager.shared.requestAuthorization { granted in
                     if granted {
                         print("Разрешение на уведомления получено")
                     } else {
@@ -69,7 +68,7 @@ struct RecipeApp: App {
     }
     
     private func checkMissedTimers() {
-        notificationManager.checkMissedTimers { missedTimers in
+        NotificationManager.shared.checkMissedTimers { missedTimers in
             if !missedTimers.isEmpty {
                 print("Обнаружены пропущенные таймеры: \(missedTimers)")
                 // Здесь можно показать алерт пользователю

@@ -106,7 +106,6 @@ final class TimerManager: ObservableObject {
     /// Переключает состояние паузы/возобновления активного таймера.
     func togglePause() {
         guard var timer = activeTimer else { return }
-        let wasRunning = timer.isRunning
         timer.isRunning.toggle()
         activeTimer = timer
         timerStates[timer.stepID] = timer
