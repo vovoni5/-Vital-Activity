@@ -12,7 +12,6 @@
 - **🔍 Поиск** – поиск по названию, ингредиентам и категориям
 - **🎨 Кастомизация** – светлая/тёмная тема, акцентный цвет, кастомные шрифты (6+ шрифтов)
 - **📊 Локальное хранение** – все данные сохраняются на устройстве через Core Data
-- **🔄 Синхронизация** – поддержка iCloud Sync (опционально)
 - **📤 Экспорт списка покупок** – возможность поделиться списком покупок через стандартные средства iOS
 - **🔄 Объединение дубликатов** – автоматическое объединение повторяющихся ингредиентов в списке покупок
 - **📱 Адаптивный интерфейс** – поддержка всех размеров экранов iPhone и iPad
@@ -32,31 +31,30 @@
    - `ShoppingListView` – экран списка покупок с группировкой и управлением
 
 2. **ViewModels & State Management**
-   - `RecipesBaseViewModel` – управление состоянием списка рецептов
-   - Использование `@State`, `@StateObject`, `@EnvironmentObject`
+   - `ShoppingListViewModel` – ViewModel для управления состоянием списка покупок
+   - Использование `@State`, `@StateObject`, `@EnvironmentObject` для управления состоянием
    - Реактивное обновление UI через Combine и Swift Concurrency
 
 3. **Business Logic & Services**
    - `TimerManager` – централизованное управление таймерами (singleton)
    - `ErrorHandler` – обработка и отображение ошибок
-   - `ImageLoader` – загрузка и кэширование изображений
-   - `UnitConverter` – конвертация единиц измерения ингредиентов
+   - `NotificationManager` – управление локальными уведомлениями
    - `ShoppingListRepository` – управление данными списка покупок в Core Data
-   - `ShoppingListViewModel` – бизнес-логика экрана списка покупок
 
-4. **Data Layer (Repository Pattern)**
-   - `RecipeRepositoryProtocol` – абстракция для работы с данными
-   - `CoreDataRecipeRepository` – реализация на Core Data
+4. **Data Layer (Core Data)**
    - `PersistenceController` – управление Core Data стеком
+   - Прямая работа с Core Data сущностями через `NSManagedObjectContext`
+   - Сериализация сложных данных через JSON в `CoreDataSupport.swift`
 
 5. **Domain Models**
-   - `DomainModels.swift` – Swift-структуры (Ingredient, CookingStep, RecipeCategory)
-   - `CoreDataSupport.swift` – расширения Core Data сущностей
+   - `DomainModels.swift` – Swift-структуры (Ingredient, CookingStep, RecipeCategory, QuantityUnit)
+   - `CoreDataSupport.swift` – расширения Core Data сущностей для сериализации
+   - `ShoppingItem.swift` – модель данных элемента списка покупок
 
 6. **Infrastructure**
    - `CommonStyles.swift`, `StyleSystem.swift` – система стилей
    - `TextWithLinks.swift` – компоненты UI
-   - `AccessibilityModifiers.swift` – доступность
+   - `ActiveTimerPanel.swift` – компактная панель активного таймера
 
 ## 📁 Детальная структура проекта
 
@@ -73,11 +71,11 @@
   - `UnitConverter` – конвертер между единицами
 - **CoreDataSupport.swift** – расширения для `RecipeEntity` и `MealPlanEntity`
 - **Recipe.xcdatamodeld** – модель Core Data с сущностями и отношениями
+- **ShoppingItem.swift** – модель данных элемента списка покупок
 
 ### Хранение данных
 - **Persistence.swift** – контроллер Core Data с shared и preview экземплярами
-- **CoreDataRecipeRepository.swift** – CRUD операции для рецептов
-- **RecipeRepositoryProtocol.swift** – протокол репозитория для тестирования
+- **ShoppingListRepository.swift** – репозиторий для CRUD операций с элементами списка покупок
 
 ### Главные экраны
 - **RecipesBaseView.swift** – список рецептов с фильтрацией и поиском
@@ -98,18 +96,13 @@
 - **ShoppingListView.swift** – главный экран списка покупок с группировкой по категориям
 - **ShoppingListViewModel.swift** – ViewModel для управления состоянием списка покупок
 - **ShoppingListRepository.swift** – репозиторий для CRUD операций с элементами покупок
-- **ShoppingItem.swift** – модель данных элемента списка покупок
 
 ### Вспомогательные компоненты
 - **CommonStyles.swift** – общие стили (кнопки, карточки, градиенты)
 - **StyleSystem.swift** – система дизайна (цвета, шрифты, тени, отступы)
 - **TextWithLinks.swift** – компонент для отображения текста с кликабельными ссылками
 - **ErrorHandler.swift** – централизованная обработка ошибок
-
-### Утилиты
-- **ImageLoader.swift** – асинхронная загрузка изображений с кэшированием
-- **AccessibilityModifiers.swift** – модификаторы для доступности (VoiceOver, Dynamic Type)
-- **LegacyErrorHandler.swift** – устаревшая реализация обработки ошибок
+- **NotificationManager.swift** – управление локальными уведомлениями
 
 ### Ресурсы
 - **Assets.xcassets** – иконки, цвета, изображения, текстурные фоны
@@ -126,13 +119,11 @@
 - **Combine** – реактивное программирование для стримов данных
 - **Swift Concurrency** – async/await для асинхронных операций
 - **UserNotifications** – локальные уведомления для таймера
-- **Core Haptics** – тактильная обратная связь (опционально)
-- **SwiftLint** – статический анализ кода
 
 ## 🚀 Быстрый старт
 
 ### Требования
-- iOS 16.0+
+- iOS 17.0+
 - Xcode 15.0+
 - Swift 5.9+
 
@@ -144,7 +135,6 @@
 
 ### Конфигурация
 - Для работы уведомлений таймера требуется разрешение `UserNotifications`
-- iCloud Sync можно включить в настройках Capabilities проекта
 - Кастомные шрифты автоматически регистрируются при запуске
 
 ## 📊 Потоки данных
@@ -152,16 +142,15 @@
 ### Создание рецепта
 1. Пользователь нажимает "+" в `RecipesBaseView`
 2. Открывается `AddOrEditRecipeSheet`
-3. Данные валидируются и сохраняются через `CoreDataRecipeRepository`
-4. `RecipesBaseViewModel` обновляет список через `@Published` свойство
-5. UI автоматически обновляется через SwiftUI binding
+3. Данные валидируются и сохраняются напрямую через Core Data
+4. UI автоматически обновляется через SwiftUI binding
 
 ### Запуск таймера
 1. В `RecipeDetailView` пользователь нажимает "Начать приготовление"
 2. Отправляется уведомление `Notification.Name.openRecipeTimer`
 3. `ContentView` перехватывает уведомление и открывает `CookingTimerViews`
 4. `TimerManager` создает таймер для каждого шага приготовления
-5. По завершению шага отправляется локальное уведомление
+5. По завершению шага отправляется локальное уведомление через `NotificationManager`
 
 ### Планирование питания
 1. В `MenuPlannerViews` пользователь перетаскивает рецепты на дни недели
@@ -177,45 +166,34 @@
 ## 🧪 Тестирование
 
 ### Unit-тесты
-- Тесты моделей: `UnitConverterTests`, `DomainModelsTests`
-- Тесты репозитория: `CoreDataRecipeRepositoryTests`, `ShoppingListRepositoryTests`
-- Тесты ViewModels: `RecipesBaseViewModelTests`, `ShoppingListViewModelTests`
+- `UnitConverterTests` – тесты конвертера единиц измерения
+- Базовые тесты приложения
 
 ### UI-тесты
 - Основные сценарии: запуск приложения, создание рецепта, таймер, работа со списком покупок
-- Accessibility тесты: проверка работы с VoiceOver
 
 ## 🔄 Миграции данных
 
 Приложение поддерживает миграцию данных через версионирование Core Data:
 1. При изменении модели данных создается новая версия в `Recipe.xcdatamodeld`
 2. Миграция выполняется автоматически с lightweight миграцией
-3. Для сложных миграций можно добавить mapping model
 
 ## 📈 Производительность
 
 ### Оптимизации
-- Пагинация списка рецептов при большом количестве записей
-- Кэширование изображений в `ImageLoader`
-- Фоновая загрузка данных через `NSAsynchronousFetchRequest`
-- Использование `@FetchRequest` с batch size для эффективной работы с Core Data
-- Группировка элементов списка покупок по категориям на уровне репозитория для уменьшения нагрузки на UI
+- Эффективная работа с Core Data через `@FetchRequest`
+- Группировка элементов списка покупок по категориям для уменьшения нагрузки на UI
 - Автоматическое объединение дубликатов при добавлении ингредиентов
-
-### Мониторинг
-- Интеграция с Instruments для анализа памяти и CPU
-- Логирование Core Data операций в debug сборке
+- Использование фоновых контекстов для операций записи
 
 ## 👥 Командная разработка
 
 ### Code Style
-- SwiftLint конфигурация в `.swiftlint.yml`
 - Единый стиль именования: camelCase для переменных, PascalCase для типов
-- Комментарии только для сложной логики (после очистки остались только essential)
+- Комментарии для сложной логики
 
 ### Git Workflow
 - Feature branches для новой функциональности
-- Pull requests с code review
 - Semantic versioning для тегов релизов
 
 ## 📄 Лицензия
@@ -233,9 +211,9 @@
 ## 📞 Контакты
 
 По вопросам сотрудничества и предложениям:
+- Tel: 8-953-035-2151
 - Email: vovova_k@mail.ru
 - GitHub: [vovoni5](https://github.com/vovoni5)
 
 ---
 
-*Приложение разработано с ❤️ для кулинаров и разработчиков*
