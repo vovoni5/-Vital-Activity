@@ -1,5 +1,9 @@
 # Recipe App – Приложение для управления рецептами
 
+<div align="center">
+  <img src="assets/Логотип.png" alt="Логотип Recipe App" width="300">
+</div>
+
 Полнофункциональное iOS-приложение для создания, хранения и приготовления рецептов с интегрированным таймером, планированием питания и локальным хранилищем на Core Data.
 
 ## 📱 Основные возможности
@@ -79,14 +83,46 @@
 
 ### Главные экраны
 - **RecipesBaseView.swift** – список рецептов с фильтрацией и поиском
+
+<div align="center">
+  <strong>Главное меню (светлая и тёмная темы)</strong><br>
+  <img src="assets/Главное меню.PNG" alt="Главное меню светлая тема" width="200">
+  <img src="assets/Главное меню Dark.PNG" alt="Главное меню тёмная тема" width="200">
+</div>
+
+<div align="center">
+  <strong>Список рецептов (светлая и тёмная темы)</strong><br>
+  <img src="assets/Список рецептов.PNG" alt="Список рецептов светлая тема" width="200">
+  <img src="assets/Список рецептов Dark.PNG" alt="Список рецептов тёмная тема" width="200">
+</div>
+
 - **RecipeDetailView.swift** – полная информация о рецепте, редактирование
+
+<div align="center">
+  <strong>Меню рецепта (светлая и тёмная темы)</strong><br>
+  <img src="assets/Меню рецепта.PNG" alt="Меню рецепта светлая тема" width="200">
+  <img src="assets/Меню рецепта Dark.PNG" alt="Меню рецепта тёмная тема" width="200">
+</div>
+
 - **AddOrEditRecipeSheet.swift** – форма создания/редактирования рецепта
 - **SplashAndMainViews.swift** – сплеш-экран и главное меню
+
+<div align="center">
+  <strong>Приветственный экран (светлая и тёмная темы)</strong><br>
+  <img src="assets/Приветственный экран.PNG" alt="Приветственный экран светлая тема" width="200">
+  <img src="assets/Приветственный экран Dark.PNG" alt="Приветственный экран тёмная тема" width="200">
+</div>
 
 ### Таймер приготовления
 - **TimerManager.swift** – управление активными таймерами, уведомлениями
 - **CookingTimerViews.swift** – интерфейс таймера с прогрессом и управлением
 - **ActiveTimerPanel.swift** – компактная панель активного таймера
+
+<div align="center">
+  <strong>Таймеры приготовления (светлая и тёмная темы)</strong><br>
+  <img src="assets/Таймеры.PNG" alt="Таймеры светлая тема" width="200">
+  <img src="assets/Таймеры Dark.png" alt="Таймеры тёмная тема" width="200">
+</div>
 
 ### Планирование питания
 - **MenuPlannerViews.swift** – недельный планировщик с drag & drop
